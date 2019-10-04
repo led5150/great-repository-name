@@ -1,4 +1,4 @@
-/**********************************************************
+/*****************************************************************************
  * Comp 15 - Fall 2019
  * 
  * Created by: Matt Champlin
@@ -6,7 +6,13 @@
  *
  * Fun Progam that generates random command file output
  * for testing with MetroSim executables
- *********************************************************/
+ *
+ * NOTES:  10/4/19 - Fixed issue with output file distribution when user 
+ *                   asked for small number of passengers (<= 25). File 
+ *                   output was uneven, now it is based on the number of
+ *                   passengers to be created, which creates a more even
+ *                   distribution.
+ ****************************************************************************/
 
 #include <iostream>
 #include <fstream>
