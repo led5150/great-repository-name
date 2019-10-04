@@ -34,6 +34,7 @@ const string NEWFILE       = "outB.txt"; // If USEFILENAME is true, this is the
 bool   initialize(int argc, char *argv[], ofstream &out, int *numptr);
 void   genFile(ofstream &out, int numPass);
 void   exitMessage(char *argv[]);
+void   setParameters(int *FCP, int *NM, int *IEM,  int *NP);
 string createRandPassenger();
 
 
@@ -99,22 +100,69 @@ bool initialize(int argc, char *argv[], ofstream &out, int *numptr) {
 //             by the "m m" (move metro) command for as many times as given
 //             by the user in the command line (numPass).  Always prints the
 //             "m f" command as the last output.  If USEFFILENAME is true,
-//             the "f [filename]" command will be inserted right after the last
-//             passenger is created, so we get a nice even distribution of 
-//             passengers to both output files.
+//             the "f [filename]" command will be inserted at 70% 
+//             of the total number of passengers given by user to ensure that
+//             we get a nice even distribution of passengers to both output //             files.
 void genFile(ofstream &out, int numPass) {
-    
+    int fileCommandPosition = 0;
+    int numMoves = 1;
+    int insertExtraMoves = 0;
+    int *FCP = &fileCommandPosition;
+    int *NM  = &numMoves;
+    int *IEM = &insertExtraMoves;
+    int *NP  = &numPass;
+
+    setParameters(FCP, NM, IEM, NP);
+
     for (int i = 0; i < numPass; i++) {
         out << createRandPassenger() << endl;
         out << MOVEMETRO << endl;
+        if (USEFFILENAME) {
+            if (i == fileCommandPosition and insertExtraMoves == 0) {
+                out << "f " << NEWFILE << endl;
+            }
+        }
     }
-    if (USEFFILENAME) {
-        out << "f " << NEWFILE << endl;
+    if (insertExtraMoves > 0) {
+        if (USEFFILENAME) {
+            for (int i = 0; i < insertExtraMoves; i++) {
+                    out << MOVEMETRO << endl;
+                }
+            out << "f " << NEWFILE << endl;
+        }
     }
-    for (int i = 0; i < numPass * 3; i++) {
+
+    for (int i = 0; i < numPass * numMoves; i++) {
         out << MOVEMETRO << endl;
     }
     out << METROFINISH << endl;
+}
+
+// Function:   setParameters *** Helper Function for genFile ***
+// Parameters: Pointers to parameters needed in genFile
+// Returns:    Nothing
+// Does:       Sets parameters based on the user specified number of 
+//             passengers.  This was implemented to fix situations where
+//             small test sizes were asked for, which resulted in uneven
+//             distribution of passengers to the two files.  Now the 
+//             distribution is based on the number of passengers.
+void setParameters(int *FCP, int *NM, int *IEM, int *NP) {
+    if (*NP < 25) {
+        *NM = *NM + 3;
+        *IEM = *NP + (*NP * .7);
+    }
+    if (*NP >= 25 and *NP < 50) {
+        *NM = *NM + 2;
+        *FCP = *NP - 1;
+    }
+    if (*NP >= 50 and *NP < 100) {
+        *NM = *NM + 1.5;
+        *FCP = *NP * .9;
+    }
+    if (*NP >= 100) {
+        *NM = *NM + 1;
+        *FCP = *NP * .8;
+    }
 }
 
 // Function:   createRandPassenger
