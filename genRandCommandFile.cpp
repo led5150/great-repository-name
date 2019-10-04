@@ -69,7 +69,10 @@ int main(int argc, char *argv[]) {
 ******************************************************************************/
 
 // Function:   initialize
-// Parameters: argc, argv, out, numptr
+// Parameters: int argc      - number of parameters given in command line
+//             char *argv[]  - given filename from argv[1] in command line
+//             ofstream &out - an output file stream
+//             int *numptr   - A pointer to the numPass int in main()
 // Returns:    True if file given by argv[1] was able to be opened and program
 //             was run with correct number of arguments in the command line
 //             False if file cannot be opened or created, or wrong number
@@ -146,7 +149,10 @@ void genFile(ofstream &out, int numPass) {
 }
 
 // Function:   setParameters *** Helper Function for genFile ***
-// Parameters: Pointers to parameters needed in genFile
+// Parameters: int *FCP - A pointer to the fileCommandPosition int in genFile()
+//             int *NM  - A pointer to the numMoves int in genFile()
+//             int *IEM - A pointer to the insertExtraMoves int in genFile()
+//             int *NP  - A pointer to the numPass int in genFile()
 // Returns:    Nothing
 // Does:       Sets parameters based on the user specified number of 
 //             passengers.  This was implemented to fix situations where
