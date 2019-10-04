@@ -108,7 +108,8 @@ bool initialize(int argc, char *argv[], ofstream &out, int *numptr) {
 //             "m f" command as the last output.  If USEFFILENAME is true,
 //             the "f [filename]" command will be inserted at 70% 
 //             of the total number of passengers given by user to ensure that
-//             we get a nice even distribution of passengers to both output //             files.
+//             we get a nice even distribution of passengers to both 
+//             output files.
 void genFile(ofstream &out, int numPass) {
     int fileCommandPosition = 0;
     int numMoves = 1;
