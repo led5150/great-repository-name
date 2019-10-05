@@ -1,4 +1,4 @@
-# great-repository-name
+# genRandCommandFile
 /*****************************************************************************
 * HW3 Helper! 
 * Comp 15
