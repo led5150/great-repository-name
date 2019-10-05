@@ -114,7 +114,7 @@ bool initialize(int argc, char *argv[], ofstream &out, int *numptr) {
 // Function:   genFile
 // Parameters: ofstream &out - The desired output file
 //             int numPass   - The desired number of passengers to be created
-// Returns:    Nothing
+// Returns:    True if file created, False if failed
 // Does:       Prints newly generated passengers to the output file, followed 
 //             by the "m m" (move metro) command for as many times as given
 //             by the user in the command line (numPass).  Always prints the
@@ -167,7 +167,8 @@ bool genFile(ofstream &out, int numPass) {
 //             int *NM  - A pointer to the numMoves int in genFile()
 //             int *IEM - A pointer to the insertExtraMoves int in genFile()
 //             int *NP  - A pointer to the numPass int in genFile()
-// Returns:    Nothing
+// Returns:    True if parameters are set, or Move Metro Only Mode is
+//             engaged, False if not
 // Does:       Sets parameters based on the user specified number of 
 //             passengers.  This was implemented to fix situations where
 //             small test sizes were asked for, which resulted in uneven
