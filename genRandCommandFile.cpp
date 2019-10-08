@@ -16,6 +16,13 @@
  *                   passengers to be created, user is given option to 
  *                   run in Move Metro Only Mode. They also have the 
  *                   option to quit, and the program will "explode" :)
+ *         10/5/19 - Fixed the situation where for lager files, a rediculous
+ *                   amount of Move Metro commands was inserted at the back
+ *                   of the file. 
+ *         10/7/19 - Fixed problem with printing way too many Move Metro 
+ *                   commands at the end of the file.  Realized it was only
+ *                   ever going to need NUMSTATIONS * 3, so we did that
+ *                   instead of the complicated y = k * log(x) solution.
  ****************************************************************************/
 
 #include <iostream>
@@ -24,6 +31,7 @@
 #include <time.h>
 #include <string>
 #include <unistd.h>
+#include <math.h>
 
 using namespace std;
 
@@ -46,7 +54,7 @@ bool   initialize(int argc, char *argv[], ofstream &out, int *numptr);
 bool   genFile(ofstream &out, int numPass);
 void   exitMessage(char *argv[]);
 void   errorMessage();
-bool   setParameters(int *FCP, int *NM, int *IEM, int *NP);
+bool   setParameters(int *FCP, int *IEM, int *NP);
 bool   moveMetroMode(int *IEM);
 string createRandPassenger();
 
@@ -125,15 +133,13 @@ bool initialize(int argc, char *argv[], ofstream &out, int *numptr) {
 //             of passengers to both output files.         
 bool genFile(ofstream &out, int numPass) {
     int fileCommandPosition = 0;
-    int numMoves = 1;
     int insertExtraMoves = 0;
 
-    int *FCP = &fileCommandPosition;
-    int *NM  = &numMoves;
-    int *IEM = &insertExtraMoves;
-    int *NP  = &numPass;
+    int    *FCP = &fileCommandPosition;
+    int    *IEM = &insertExtraMoves;
+    int    *NP  = &numPass;
 
-    if (! setParameters(FCP, NM, IEM, NP)) {
+    if (! setParameters(FCP, IEM, NP)) {
         return false;
     }
 
@@ -155,7 +161,7 @@ bool genFile(ofstream &out, int numPass) {
         }
     }
 
-    for (int i = 0; i < numPass * numMoves; i++) {
+    for (int i = 0; i < NUMSTATIONS * 3; i++) {
         out << MOVEMETRO << endl;
     }
     out << METROFINISH << endl;
@@ -164,7 +170,6 @@ bool genFile(ofstream &out, int numPass) {
 
 // Function:   setParameters *** Helper Function for genFile ***
 // Parameters: int *FCP - A pointer to the fileCommandPosition int in genFile()
-//             int *NM  - A pointer to the numMoves int in genFile()
 //             int *IEM - A pointer to the insertExtraMoves int in genFile()
 //             int *NP  - A pointer to the numPass int in genFile()
 // Returns:    True if parameters are set, or Move Metro Only Mode is
@@ -174,7 +179,7 @@ bool genFile(ofstream &out, int numPass) {
 //             small test sizes were asked for, which resulted in uneven
 //             distribution of passengers to the two files.  Now the 
 //             distribution is based on the number of passengers.
-bool setParameters(int *FCP, int *NM, int *IEM, int *NP) {
+bool setParameters(int *FCP, int *IEM, int *NP) {
     // Catch exception if user inputs 0 or a negative number for numPassengers
     // Allows user an "out" to test in Move Metro Only Mode.
     if (*NP <= 0) {
@@ -183,24 +188,19 @@ bool setParameters(int *FCP, int *NM, int *IEM, int *NP) {
         }
     }
     if (*NP >=1 and *NP <= 10) {
-        *NM  = *NM + 5;
         *IEM = NUMSTATIONS;
     }
     else if (*NP > 10 and *NP <= 24) {
-        *NM  = *NM + 3;
         *IEM = *NP + (*NP * .6);
     }
     else if (*NP >= 25 and *NP < 50) {
-        *NM  = *NM + 2;
         *FCP = *NP * .5;
         *IEM = NUMSTATIONS;
     }
     else if (*NP >= 50 and *NP < 100) {
-        *NM  = *NM + 1.5;
         *FCP = *NP * .9;
     }
     else if (*NP >= 100) {
-        *NM  = *NM + .1;
         *FCP = *NP * .8;
     }
     return true;
