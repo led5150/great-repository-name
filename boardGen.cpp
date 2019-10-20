@@ -85,8 +85,7 @@ vector<char> insertSpaces(char board[size][size])
             temp.push_back(board[i][j]);
             if (j < size - 1){
                 temp.push_back(' ');
-            }
-            
+            }       
         }
     }
     return temp;
