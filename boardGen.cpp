@@ -99,8 +99,8 @@ vector<char> insertSpaces(char board[size][size])
 //             position.
 void makeDefaultBoard(char board[size][size]) {
     int insert[8] = {0, 2, 4, 6, 8, 10, 12, 14};
-    int randi = insert[rand() % 7];
-    int randj = insert[rand() % 7];
+    int randi = insert[rand() % 8];
+    int randj = insert[rand() % 8];
     for (int i = 0; i < size; ++i) {
         for (int j = 0; j < size; ++j)
         {
