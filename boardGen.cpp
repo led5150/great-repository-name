@@ -127,7 +127,7 @@ void makeDefaultBoard(char board[size][size]) {
 // Parameters: char board - a board of demensions size x size
 // Returns:    Nothing
 // Does:       Inserts proper vertical or horizontal walls at the correct spot
-//             in the board array
+//             in the board array. Has a 30% of adding a wall.
 void insertWalls(char board[size][size]) {
     char vertWall[10] = {'O','O','O','O','O','O','O','|','|','|'};
     char horzWall[10] = {'O','O','O','O','O','O','O','-','-','-'};
@@ -140,7 +140,9 @@ void insertWalls(char board[size][size]) {
                 }
             }
             else {
-                board[i][j] = horzWall[rand() % 10];
+                if (j % 2 == 0) {
+                    board[i][j] = horzWall[rand() % 10];
+                }
             }
         }
     }
